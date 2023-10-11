@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from typing import Union, List
 
-import pandas as pd
 import rich.tree
 from rich.console import Console
 from rich.tree import Tree
@@ -45,6 +44,10 @@ class TreePrinter:
         print(tabulate(df, headers='keys', tablefmt='psql'))
 
     def to_dataframe(self, leaf_keys: Union[str, List[str]] = None):
+        try:
+            import pandas as pd
+        except Exception as e:
+            logger.error("You must install Pandas ( `pip install pandas`) to use the `to_dataframe` method!")
         if leaf_keys is None:
             leaf_keys = self.tree.get_all_leaf_keys()
 
