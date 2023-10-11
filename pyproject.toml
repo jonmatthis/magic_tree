@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "magictree"
+version = "0.1.0"
+description = "Defines the `MagicTreeDict` class - which extends  `defaultdict` into an auto-building recursive tree for intuitive manipulation, analysis, and visualization of hierarchical data 🌱✨"
+authors = ["jonmatthis <jonmatthis@gmail.com>"]
+license = "AGPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.9"
+numpy = "^1.26.0"
+pandas = "^2.1.1"
+rich = "^13.6.0"
+tabulate = "^0.9.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+black = "^23.9.1"
+bumpver = "^2023.1127"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
