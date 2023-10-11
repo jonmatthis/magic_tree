@@ -17,7 +17,9 @@ Expected output (2023-10-11):
 C:\Users\jonma\AppData\Local\pypoetry\Cache\virtualenvs\magictree-xRvLYKaC-py3.11\Scripts\python.exe C:\Users\jonma\github_repos\jonmatthis\magictree\magic_tree\helpers\demo.py 
 Print as regular dict:
 
-{'a': {'b': {'c': {'woo': [1, 2, 13], 'woo2': '✨', 'hey': [71, 8, 9]}, 'bang': [[1, 2, 3], [4, 5, 6], [7, 8, 9]]}, 'c': {'pow': [4, 51, 6]}}}
+{   'a': {   'b': {   'bang': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                      'c': {'hey': [71, 8, 9], 'woo': [1, 2, 13], 'woo2': '✨'}},
+             'c': {'pow': [4, 51, 6]}}}
 Original MagicTreeDict:
 🌱
 └── a

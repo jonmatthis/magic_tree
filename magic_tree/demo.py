@@ -1,8 +1,9 @@
+from pprint import pprint
 
+from magic_tree.magic_tree_dict import MagicTreeDict
 
 
 def create_sample_magic_tree():
-    from magic_tree import MagicTreeDict
     magic_tree = MagicTreeDict()
     magic_tree['a']['b']['c']['woo'] = [1, 2, 13]
     magic_tree['a']['b']['c']['woo2'] = '✨'
@@ -14,9 +15,10 @@ def create_sample_magic_tree():
 
 
 def magic_tree_demo():
+
     tree = create_sample_magic_tree()
     print(f"Print as regular dict:\n")
-    print(tree.__dict__())
+    pprint(tree.dict(), indent=4)
 
     # TODO - this still includes the defaultdicts, will need to override __iter__ or items or soemthing to fix this ish
     # print(dict(tree))
