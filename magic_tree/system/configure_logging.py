@@ -5,6 +5,7 @@ from enum import Enum
 from logging.config import dictConfig
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
 
 class LogLevel(Enum):
     TRACE = 5
@@ -129,9 +130,7 @@ class LoggerBuilder:
                 if handler not in logging.getLogger("").handlers:
                     logging.getLogger("").handlers.append(handler)
         else:
-            from jonbot.system.setup_logging.get_logger import get_jonbot_logger
 
-            logger = get_jonbot_logger()
             logger.info("Logging already configured")
 
 

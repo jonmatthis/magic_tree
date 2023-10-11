@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Union, Literal, Hashable, Callable, Any, Iterable, List
 
-from jonbot import logger
+from magic_tree.system.configure_logging import logger
 
 if TYPE_CHECKING:
-    from jonbot.backend.data_layer.magic_tree import MagicTreeDict
+    import MagicTreeDict
 
 
 class TreeCalculator:
@@ -118,15 +118,14 @@ class TreeCalculator:
 
 
 if __name__ == "__main__":
-    from jonbot.backend.data_layer.magic_tree import MagicTreeDict
+    import MagicTreeDict
 
-    import numpy as np
 
     tree = MagicTreeDict()
     tree["a"]["b"]["c"] = [1, 2, 3]
     tree[["a", "b", 3]] = [4, 5, 6]
     tree[("a", "c", "a")] = [4, 5, 6]
     print(tree)
-    mean_tree = tree.map_function(function=np.mean,
+    mean_tree = tree.map_function(function=lambda x: sum(x) / len(x),
                                   map_to='leaves', )
     print(mean_tree)

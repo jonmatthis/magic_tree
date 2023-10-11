@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 from typing import Union, List
 
+import pandas as pd
 import rich.tree
 from rich.console import Console
 from rich.tree import Tree
 from tabulate import tabulate
 
 if TYPE_CHECKING:
-    from jonbot.backend.data_layer.magic_tree import MagicTreeDict
+    import MagicTreeDict
 
 
 class TreePrinter:
@@ -47,7 +48,7 @@ class TreePrinter:
         if leaf_keys is None:
             leaf_keys = self.tree.get_all_leaf_keys()
 
-        paths = [self.tree.get_paths_to_keys(key=key) for key in leaf_keys]
+        paths = [self.tree.get_paths_to_keys(keys=key) for key in leaf_keys]
         paths = [path for sublist in paths for path in sublist]  # flatten list
 
         table_dict = {}

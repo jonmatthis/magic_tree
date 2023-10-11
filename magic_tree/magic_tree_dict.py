@@ -4,8 +4,8 @@ from collections import defaultdict
 from typing import Any, Callable, Hashable, Iterable, Literal
 from typing import List, Union
 
-from jonbot.backend.data_layer.magic_tree.helpers.calculator import TreeCalculator
-from jonbot.backend.data_layer.magic_tree.helpers.printer import TreePrinter
+from magic_tree.helpers.calculator import TreeCalculator
+from magic_tree.helpers.printer import TreePrinter
 
 
 class MagicTreeDict(defaultdict):
@@ -67,7 +67,8 @@ class MagicTreeDict(defaultdict):
 
         for key in keys:
 
-            key_paths = self._traverse_tree(lambda path, value: key_paths.append(path) if path[-1] == key else None)
+            key_paths = []
+            self._traverse_tree(lambda path, value: key_paths.append(path) if path[-1] == key else None)
 
             if not key_paths and not missing_ok:
                 raise KeyError(f"Leaf key '{key}' not found in tree.")
@@ -123,7 +124,7 @@ class MagicTreeDict(defaultdict):
         Returns a new tree containing only the branches and leaves that contain the target key.
         """
         new_tree = MagicTreeDict()
-        paths = self.get_paths_for_keys(keys=[target_key])
+        paths = self.get_paths_to_keys(keys=[target_key])
         if len(paths) == 0:
             raise KeyError(f"'{target_key}' not found in tree...")
 

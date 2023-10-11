@@ -1,15 +1,13 @@
-import numpy as np
 
-from jonbot.backend.data_layer.magic_tree import MagicTreeDict
 
 
 def create_sample_magic_tree():
+    from magic_tree import MagicTreeDict
     magic_tree = MagicTreeDict()
     magic_tree['a']['b']['c']['woo'] = [1, 2, 13]
     magic_tree['a']['b']['c']['woo2'] = '✨'
-    magic_tree['a']['b']['??️'] = np.eye(
-        3)  # TODO - doesn't handle this correctly - skips it in stats, and prints matrix poorly
-    magic_tree['a']['c']['bang'] = [4, 51, 6]
+    magic_tree['a']['b']['bang'] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    magic_tree['a']['c']['pow'] = [4, 51, 6]
     magic_tree['a']['b']['c']['hey'] = [71, 8, 9]
 
     return magic_tree
@@ -19,23 +17,21 @@ def magic_tree_demo():
     tree = create_sample_magic_tree()
     print(f"Print as regular dict:\n")
     print(tree.__dict__())
-    print(dict(
-        tree))  # TODO - this still includes the defaultdicts, will need to override __iter__ or items or soemthing to fix this ish
+
+    # TODO - this still includes the defaultdicts, will need to override __iter__ or items or soemthing to fix this ish
+    # print(dict(tree))
 
     print(f"Original MagicTreeDict:\n{tree}\n\n")
-    print(f"Calculate tree stats and return in new MagicTreeDict:\n{tree.calculate_tree_stats()}\n\n")
     print(f"Print Table:\n")
     tree.print_table(['woo', 'bang', 'hey'])
 
     print(f"Filter tree on `c`:\n")
     c_tree = tree.filter_tree('c')
     print(c_tree)
-
-    stats = tree.calculate_tree_stats()
-    print(f"Calculate Tree Stats:\n{stats}\n\n")
-    print(f"Print stats table:\n")
-    stats.print_table(['mean', 'std'])
-    return tree
+    #
+    # stats = tree.map_function(function=lambda x: sum(x) / len(x),
+    #                           map_to='leaves', )
+    # print(f"Calculate Tree Stats:\n{stats}\n\n")
 
 
 if __name__ == "__main__":
