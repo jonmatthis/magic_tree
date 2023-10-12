@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from typing import Union, List
 
+import pandas as pd
 import rich.tree
 from rich.console import Console
 from rich.tree import Tree
@@ -11,29 +12,39 @@ if TYPE_CHECKING:
 
 
 class TreePrinter:
-    def __init__(self, tree: 'MagicTreeDict'):
+    def __init__(self, tree: 'MagicTreeDict', max_content_length: int = 200):
         self.tree = tree
+        self.max_content_length = max_content_length
+
 
     def __str__(self):
         try:
             console = Console()
             with console.capture() as capture:
                 rich_tree = Tree(":seedling:")
-                self._add_branch(rich_tree, dict(self.tree))
+                self._add_branch(rich_tree=rich_tree,
+                                 sub_dictionary=self.tree.dict()
+                                 )
                 console.print(rich_tree)
             return capture.get()
         except Exception as e:
             print(f"Failed to print tree: {e}")
             raise e
 
-    def _add_branch(self, rich_tree: rich.tree.Tree, subdict):
+    def _add_branch(self,
+                    rich_tree: rich.tree.Tree,
+                    sub_dictionary: dict):
         try:
-            for key, value in subdict.items():
+            for key, value in sub_dictionary.items():
                 if isinstance(value, dict):
                     branch = rich_tree.add(str(key))
                     self._add_branch(branch, value)
                 else:
                     value = str(value)  # try to convert it to a string
+                    if len(value) > self.max_content_length:
+                        value = value[:int(self.max_content_length / 2)] + "\n...\n" + value[-int(
+                            self.max_content_length / 2):]
+
                     rich_tree.add(f"{key}: {value}")
         except Exception as e:
             print(f"Failed to add branch: {e}")
@@ -44,10 +55,7 @@ class TreePrinter:
         print(tabulate(df, headers='keys', tablefmt='psql'))
 
     def to_dataframe(self, leaf_keys: Union[str, List[str]] = None):
-        try:
-            import pandas as pd
-        except Exception as e:
-            logger.error("You must install Pandas ( `pip install pandas`) to use the `to_dataframe` method!")
+
         if leaf_keys is None:
             leaf_keys = self.tree.get_all_leaf_keys()
 

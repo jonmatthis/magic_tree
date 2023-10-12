@@ -1,6 +1,7 @@
 from pathlib import Path
 from pprint import pprint
 
+from magic_tree.controller.builders.directory_tree_builder import DirectoryTreeBuilder
 from magic_tree.magic_tree_dictionary import MagicTreeDictionary
 
 
@@ -47,10 +48,11 @@ def magic_tree_demo():
 
     directory = Path(__file__).parent.parent
     print(f"Print a file structure from: {directory}")
-    tree = MagicTreeDictionary.from_directory(directory=directory)
+    tree = DirectoryTreeBuilder.from_path(path=directory)
     print(tree)
+    return tree
 
 
 if __name__ == "__main__":
-    tree = magic_tree_demo()
+    tree_out = magic_tree_demo()
     f = 9

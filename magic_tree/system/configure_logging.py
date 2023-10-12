@@ -130,7 +130,7 @@ class LoggerBuilder:
                 if handler not in logging.getLogger("").handlers:
                     logging.getLogger("").handlers.append(handler)
         else:
-
+            logger = logging.getLogger(__name__)
             logger.info("Logging already configured")
 
 

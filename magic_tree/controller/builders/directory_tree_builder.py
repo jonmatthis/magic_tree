@@ -1,14 +1,14 @@
+import logging
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Iterable, Hashable, Union
 
 from pydantic import BaseModel, root_validator
 
-from magic_tree import logger
 from magic_tree.magic_tree_dictionary import MagicTreeDictionary
 from magic_tree.models.configuration.directory_tree_builder_configuration import DirectoryTreeConfig
 
-
+logger = logging.getLogger(__name__)
 class DirectoryTreeBuilder(BaseModel):
     root_path: Path
     config: DirectoryTreeConfig
@@ -27,7 +27,7 @@ class DirectoryTreeBuilder(BaseModel):
                   path: Union[Path, str],
                   config: DirectoryTreeConfig = None,
                   tree=None,
-                  create_directory: bool = False):
+                  create_directory: bool = False) -> 'MagicTreeDictionary':
         if create_directory:
             Path(path).mkdir(parents=True, exist_ok=True)
         if tree is None:
@@ -40,7 +40,7 @@ class DirectoryTreeBuilder(BaseModel):
                        tree=tree)
 
         instance.fetch_file_content(path)
-        return instance
+        return tree
 
     def fetch_file_content(self, path: Union[str, Path], current_depth=0) -> 'MagicTreeDictionary':
         logger.trace(f"Fetching content for path: {path}")
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     root_directory_in = r"C:\Users\jonma\github_repos\jonmatthis\magic_tree\magic_tree"
     directory_tree = DirectoryTreeBuilder.from_path(path=root_directory_in)
 
-    print(directory_tree.tree)
+    directory_tree.print()

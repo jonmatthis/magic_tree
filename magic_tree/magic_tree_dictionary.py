@@ -5,8 +5,8 @@ from collections import defaultdict
 from typing import Any, Callable, Hashable, Iterable, Literal
 from typing import List, Union
 
-from magic_tree.helpers.calculator import TreeCalculator
-from magic_tree.helpers.printer import TreePrinter
+from magic_tree.controller.computation.apply_function_to_nodes import TreeCalculator
+from magic_tree.view.printer import TreePrinter
 
 
 class MagicTreeDictionary(defaultdict):
@@ -95,13 +95,10 @@ class MagicTreeDictionary(defaultdict):
             raise KeyError(f"No data found at path: {path}")
         return data
 
-
-
     def print_leaf_info(self, current=None, path=None) -> None:
         """Prints the information about all the leaves of the tree."""
         self._get_leaf_info()
         print(self._leaf_info)
-
 
     def print_table(self, keys: Union[str, List[str]] = None) -> None:
         if isinstance(keys, str):
@@ -237,6 +234,9 @@ class MagicTreeDictionary(defaultdict):
     def __str__(self):
         return TreePrinter(self).__str__()
 
+    def print(self, max_content_length=200):
+        return TreePrinter(self, max_content_length=max_content_length).__str__()
+
     def __setitem__(self, key: Union[Hashable, Iterable[Hashable]], value: Any):
         """
         Allows for setting values using a list of keys, e.g. `magic_tree['a']['b']['c'] = 1`
@@ -290,12 +290,3 @@ class MagicTreeDictionary(defaultdict):
 
     def to_json(self, indent=4, **kwargs):
         return json.dumps(self, indent=indent, **kwargs)
-
-    @classmethod
-    def from_directory(cls, directory):
-        tree = cls()
-        tree.load_directory(directory)
-        return tree
-
-
-

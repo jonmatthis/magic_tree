@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, Union, Literal, Hashable, Callable, Any, Iterable, List
 import logging
+from typing import TYPE_CHECKING, Union, Literal, Hashable, Callable, Any, Iterable, List
+
 logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     import MagicTreeDict
