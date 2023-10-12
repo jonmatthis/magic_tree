@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class DirectoryTreeConfig(BaseModel):
-    included: List[str] = Field(default=["*.py"], description="List of files/folders to include, e.g. ['data', 'logs']")
+    included: List[str] = Field(default=[], description="List of files/folders to include, e.g. ['data', 'logs']")
     excluded: List[str] = Field(default=['__pycache__', '.git', '*env', '*.pyc', '*.pyo', '*.pyd', '.DS_Store'],
                                 description="List of files/folders to exclude, e.g. ['__pycache__', '.git', 'env']")
     recursion_depth: int = Field(

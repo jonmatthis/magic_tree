@@ -63,6 +63,10 @@ class DirectoryTreeBuilder(BaseModel):
         for pattern in self.config.excluded:
             if fnmatch(filename, pattern):
                 return False
+
+        if not self.config.included:
+            return True
+
         for pattern in self.config.included:
             if fnmatch(filename, pattern):
                 return True
