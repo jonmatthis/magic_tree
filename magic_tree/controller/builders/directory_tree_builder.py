@@ -93,7 +93,7 @@ class DirectoryTreeBuilder(BaseModel):
         path = Path(path)
 
         path_paths = path.relative_to(Path(self.root_path)).parts
-        tree_path.extend([f"{path}/" for part in path_paths if part not in self.config.excluded])
+        tree_path.extend([f"{part}/" for part in path_paths])
         return tree_path
 
 
