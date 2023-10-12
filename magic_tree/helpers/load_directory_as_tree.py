@@ -1,11 +1,24 @@
 from pathlib import Path
 from typing import Union, Iterable, Callable
 
-from magic_tree.magic_tree_dict import MagicTreeDict
 from magic_tree import logger
+from magic_tree.magic_tree_dict import MagicTreeDict
 
 
-def load_directory(directory: str,
+def load_directory(self, directory: str) -> None:
+    """
+    Load all the paths and subpaths inside the given directory to the tree.
+    """
+    base_path = Path(directory)
+    for path in base_path.rglob('*'):
+        if path.is_file():
+            relative_path = path.relative_to(base_path)
+            self[relative_path.parts] = path.name
+
+    return self
+
+
+def load_directory(root_directory: str,
                    tree: MagicTreeDict = MagicTreeDict(),
                    recursion_depth: int = -1,
                    included_extensions: Union[str, Iterable[str]] = None,
@@ -13,6 +26,8 @@ def load_directory(directory: str,
                    include_hidden_files: bool = False,
                    included_directories: Union[str, Iterable[str]] = None,
                    excluded_directories: Union[str, Iterable[str]] = None,
+                   included_file_names: Union[str, Iterable[str]] = None,
+                     excluded_file_names: Union[str, Iterable[str]] = None,
                    content_loader: Callable = None) -> MagicTreeDict:
     """
     Load the paths and files of the input `directory` into the tree using pathlib.Path.rglob.
@@ -46,15 +61,15 @@ def load_directory(directory: str,
     elif isinstance(excluded_directories, str):
         excluded_directories = [excluded_directories]
 
-    directory = Path(directory)
+    root_directory = Path(root_directory)
 
-    if not directory.exists():
-        raise FileNotFoundError(f"Directory {directory} does not exist.")
+    if not root_directory.exists():
+        raise FileNotFoundError(f"Directory {root_directory} does not exist.")
 
-    if not directory.is_dir():
-        directory = directory.parent
+    if not root_directory.is_dir():
+        root_directory = root_directory.parent
 
-    for path in directory.rglob("*"):
+    for path in root_directory.rglob("*"):
         if path.is_dir() and recursion_depth != 0:
             if not include_hidden_files and path.name.startswith('.'):
                 continue
@@ -62,14 +77,19 @@ def load_directory(directory: str,
                 continue
             if included_directories and path.name not in included_directories:
                 continue
-            tree[path.name] = load_directory(path,
-                                             recursion_depth=recursion_depth - 1 if recursion_depth > 0 else recursion_depth,
-                                             included_extensions=included_extensions,
-                                             excluded_extensions=excluded_extensions,
-                                             include_hidden_files=include_hidden_files,
-                                             included_directories=included_directories,
-                                             excluded_directories=excluded_directories,
-                                             content_loader=content_loader)
+
+            if content_loader is not None:
+                try:
+                    content = content_loader(path)
+                except Exception as e:
+                    logger.error(f"Error loading content from {path}.")
+                    logger.exception(e)
+                    content = None
+            else:
+                content = None
+            tree_path = path.relative_to(root_directory).parts
+            tree[path.relative_to(root_directory).parts] = {'path': path,
+                                                       'content': content}
         else:
             if not include_hidden_files and path.name.startswith('.'):
                 continue
@@ -86,13 +106,16 @@ def load_directory(directory: str,
             tree[path.name] = {'path': path,
                                'content': content_loader(path) if content_loader is not None else None}
 
-
     return tree
 
 
 if __name__ == "__main__":
-    tree = load_directory(directory=str(Path(__file__).parent.parent),
+    tree = load_directory(root_directory=str(Path(__file__).parent.parent),
                           recursion_depth=1,
                           included_extensions=['py'],
+                          excluded_file_names=["poetry.lock", ".gitignore", "LICENSE", "*.env"],
+                          included_file_names=["*.py"],
+                          included_directories=["magic_tree"],
+                          excluded_directories=["__pycache__", ".git", "legacy", ".idea", "venv", ".pytest_cache"],
                           content_loader=lambda x: x.read_text())
     print(tree)

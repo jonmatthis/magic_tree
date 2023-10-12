@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from pprint import pprint
 
 from magic_tree.magic_tree_dict import MagicTreeDict
@@ -7,15 +9,24 @@ def create_sample_magic_tree():
     magic_tree = MagicTreeDict()
     magic_tree['a']['b']['c']['woo'] = [1, 2, 13]
     magic_tree['a']['b']['c']['woo2'] = '✨'
-    magic_tree['a']['b']['bang'] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-    magic_tree['a']['c']['pow'] = [4, 51, 6]
+    # magic_tree['a']['b']['c']['woo2']['woo3'] = '??' ??? doesn't work - should add new node, i think?
+    magic_tree['a']['b']['??️'] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    magic_tree['a']['c']['bang'] = [4, 51, 6]
     magic_tree['a']['b']['c']['hey'] = [71, 8, 9]
+
+    # TODO  - would be cool to have some kind of 'interpretter' on the keys, so that we could do something like this:
+    # magic_tree['a']['b']['c']['woo'] = [1, 2, 13]
+    # magic_tree[['a', 'b'], ('c', 93)] = '✨'
+    # magic_tree[('a', 'b')]['bang'] = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    # magic_tree['a/c/pow'] = [4, 51, 6]
+    # magic_tree['a.b.c']['hey'] = [71, 8, 9]
+    # magic_tree[Path("a") / "b" / "c"]['gee'] = [71, 8, 9]
+    # # magic_tree[os.path('a').join("b")]["c"]['whiz'] = [71, 8, 9]
 
     return magic_tree
 
 
 def magic_tree_demo():
-
     tree = create_sample_magic_tree()
     print(f"Print as regular dict:\n")
     pprint(tree.dict(), indent=4)
@@ -34,6 +45,11 @@ def magic_tree_demo():
     # stats = tree.map_function(function=lambda x: sum(x) / len(x),
     #                           map_to='leaves', )
     # print(f"Calculate Tree Stats:\n{stats}\n\n")
+
+    directory = Path(__file__).parent.parent
+    print(f"Print a file structure from: {directory}")
+    tree = MagicTreeDict.from_directory(directory=directory)
+    print(tree)
 
 
 if __name__ == "__main__":

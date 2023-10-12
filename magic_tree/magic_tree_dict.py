@@ -2,6 +2,7 @@ import collections
 import json
 import sys
 from collections import defaultdict
+from os import PathLike
 from pathlib import Path
 from typing import Any, Callable, Hashable, Iterable, Literal
 from typing import List, Union
@@ -96,17 +97,13 @@ class MagicTreeDict(defaultdict):
             raise KeyError(f"No data found at path: {path}")
         return data
 
-    def calculate_tree_stats(self,
-                             metrics: List[str] = None,
-                             data_keys: List[str] = None) -> 'MagicTreeDict':
-        stats = TreeCalculator(self).calculate_stats(metrics=metrics,
-                                                     data_keys=data_keys)
-        return stats
+
 
     def print_leaf_info(self, current=None, path=None) -> None:
         """Prints the information about all the leaves of the tree."""
         self._get_leaf_info()
         print(self._leaf_info)
+
 
     def print_table(self, keys: Union[str, List[str]] = None) -> None:
         if isinstance(keys, str):
@@ -295,6 +292,12 @@ class MagicTreeDict(defaultdict):
 
     def to_json(self, indent=4, **kwargs):
         return json.dumps(self, indent=indent, **kwargs)
+
+    @classmethod
+    def from_directory(cls, directory):
+        tree = cls()
+        tree.load_directory(directory)
+        return tree
 
 
 
