@@ -92,7 +92,7 @@ class DirectoryTreeBuilder(BaseModel):
 
         path = Path(path)
 
-        path_paths = path.relative_to(Path(self.root_path)).parts
+        path_parts = path.relative_to(Path(self.root_path)).parts
         for part in path_parts:
             if not "." in part:
                 tree_path.append(f"{part}/")
