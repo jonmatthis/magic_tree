@@ -6,13 +6,13 @@ from pathlib import Path
 from typing import Union
 
 from magic_tree.controller.builders.directory_tree_builder import DirectoryTreeBuilder
-from magic_tree.examples.document_tree_eater.helpers.llm_chains import create_component_summary_chain, \
+from magic_tree.examples.tree_eaters.helpers.document_llm_chains import create_component_summary_chain, \
     create_global_summary_chain
 
 load_dotenv()
 
 
-async def auto_document(document_root_path: Union[Path, str]):
+async def document_tree_eater(document_root_path: Union[Path, str]):
     output_text = ""
 
     component_summary_chain = create_component_summary_chain()
@@ -61,5 +61,5 @@ async def auto_document(document_root_path: Union[Path, str]):
 
 
 if __name__ == "__main__":
-    document_root_path = Path(__file__).parent.parent.parent / "document"
-    asyncio.run(auto_document(document_root_path=document_root_path))
+    document_root_path_in = Path(__file__).parent.parent.parent / "document"
+    asyncio.run(document_tree_eater(document_root_path=document_root_path_in))

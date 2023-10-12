@@ -1,5 +1,8 @@
-SUMMARY_PROMPT = """
-Summarize the following text, which is a section of an NIH R01. 
+from langchain.chat_models import ChatOpenAI, ChatAnthropic
+from langchain.prompts import ChatPromptTemplate
+
+DOCUMENT_SUMMARY_PROMPT = """
+Summarize the following text, which is a section of an a larger document. 
 
 The text is writtne in `.tex`. In your summary, you should roughly match the 
 structure defined in the `tex` file using markdown heading levels to match tex 
@@ -27,7 +30,7 @@ structure defined in the `tex` file using markdown heading levels to match tex
 
 
 def create_component_summary_chain():
-    prompt = ChatPromptTemplate.from_template(SUMMARY_PROMPT)
+    prompt = ChatPromptTemplate.from_template(DOCUMENT_SUMMARY_PROMPT)
     model = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-16k")
     chain = prompt | model
     return chain
