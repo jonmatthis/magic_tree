@@ -5,14 +5,14 @@ from typing import Iterable, Hashable, Union
 from pydantic import BaseModel, root_validator
 
 from magic_tree import logger
-from magic_tree.magic_tree_dict import MagicTreeDict
+from magic_tree.magic_tree_dictionary import MagicTreeDictionary
 from magic_tree.models.configuration.directory_tree_builder_configuration import DirectoryTreeConfig
 
 
 class DirectoryTreeBuilder(BaseModel):
     root_path: Path
     config: DirectoryTreeConfig
-    tree: MagicTreeDict
+    tree: MagicTreeDictionary
 
     @root_validator
     def validate_root_path(cls, values):
@@ -31,7 +31,7 @@ class DirectoryTreeBuilder(BaseModel):
         if create_directory:
             Path(path).mkdir(parents=True, exist_ok=True)
         if tree is None:
-            tree = MagicTreeDict()
+            tree = MagicTreeDictionary()
         if config is None:
             config = DirectoryTreeConfig()
 
@@ -42,7 +42,7 @@ class DirectoryTreeBuilder(BaseModel):
         instance.fetch_file_content(path)
         return instance
 
-    def fetch_file_content(self, path: Union[str, Path], current_depth=0) -> 'MagicTreeDict':
+    def fetch_file_content(self, path: Union[str, Path], current_depth=0) -> 'MagicTreeDictionary':
         logger.trace(f"Fetching content for path: {path}")
         path = Path(path)
         for path in Path(path).rglob("*"):

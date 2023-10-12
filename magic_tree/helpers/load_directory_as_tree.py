@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Union, Iterable, Callable
 
 from magic_tree import logger
-from magic_tree.magic_tree_dict import MagicTreeDict
+from magic_tree.magic_tree_dictionary import MagicTreeDictionary
 
 
 def load_directory(self, directory: str) -> None:
@@ -19,7 +19,7 @@ def load_directory(self, directory: str) -> None:
 
 
 def load_directory(root_directory: str,
-                   tree: MagicTreeDict = MagicTreeDict(),
+                   tree: MagicTreeDictionary = MagicTreeDictionary(),
                    recursion_depth: int = -1,
                    included_extensions: Union[str, Iterable[str]] = None,
                    excluded_extensions: Union[str, Iterable[str]] = None,
@@ -27,8 +27,8 @@ def load_directory(root_directory: str,
                    included_directories: Union[str, Iterable[str]] = None,
                    excluded_directories: Union[str, Iterable[str]] = None,
                    included_file_names: Union[str, Iterable[str]] = None,
-                     excluded_file_names: Union[str, Iterable[str]] = None,
-                   content_loader: Callable = None) -> MagicTreeDict:
+                   excluded_file_names: Union[str, Iterable[str]] = None,
+                   content_loader: Callable = None) -> MagicTreeDictionary:
     """
     Load the paths and files of the input `directory` into the tree using pathlib.Path.rglob.
 

@@ -2,8 +2,6 @@ import collections
 import json
 import sys
 from collections import defaultdict
-from os import PathLike
-from pathlib import Path
 from typing import Any, Callable, Hashable, Iterable, Literal
 from typing import List, Union
 
@@ -11,7 +9,7 @@ from magic_tree.helpers.calculator import TreeCalculator
 from magic_tree.helpers.printer import TreePrinter
 
 
-class MagicTreeDict(defaultdict):
+class MagicTreeDictionary(defaultdict):
     """
     A class that integrates `defaultdict` with added functionality.
 
@@ -22,11 +20,11 @@ class MagicTreeDict(defaultdict):
     """
 
     def __init__(self):
-        super().__init__(self.create_nested_dict)
+        super().__init__(self.create_nested_dictionary)
 
     @staticmethod
-    def create_nested_dict() -> defaultdict:
-        return defaultdict(MagicTreeDict.create_nested_dict)
+    def create_nested_dictionary() -> defaultdict:
+        return defaultdict(MagicTreeDictionary.create_nested_dictionary)
 
     @property
     def number_of_leaves(self) -> int:
@@ -83,7 +81,7 @@ class MagicTreeDict(defaultdict):
         return paths
 
     def get_data_from_path(self, path: Iterable[Hashable], current=None, missing_ok=True) -> Union[
-        'MagicTreeDict', Any]:
+        'MagicTreeDictionary', Any]:
         """
         Returns the data at the given path, be it a leaf(endpoint) or a branch (i.e. a sub-tree/dict)
 
@@ -118,11 +116,11 @@ class MagicTreeDict(defaultdict):
         self._traverse_tree(lambda path, value: paths.append(path))
         return paths
 
-    def filter_tree(self, target_key) -> 'MagicTreeDict':
+    def filter_tree(self, target_key) -> 'MagicTreeDictionary':
         """
         Returns a new tree containing only the branches and leaves that contain the target key.
         """
-        new_tree = MagicTreeDict()
+        new_tree = MagicTreeDictionary()
         paths = self.get_paths_to_keys(keys=[target_key])
         if len(paths) == 0:
             raise KeyError(f"'{target_key}' not found in tree...")
@@ -138,7 +136,7 @@ class MagicTreeDict(defaultdict):
     def map_function(self,
                      function: Callable,
                      make_new_tree: bool = True,
-                     **kwargs) -> "MagicTreeDict":
+                     **kwargs) -> "MagicTreeDictionary":
         results = TreeCalculator(self).map_function(function=function,
                                                     **kwargs)
         if not make_new_tree:
@@ -192,7 +190,7 @@ class MagicTreeDict(defaultdict):
                         elif duplicate_keys == 'append':
                             data_at_path.update(value, level=0, duplicate_keys='append')
 
-    def create_new_tree(self) -> 'MagicTreeDict':
+    def create_new_tree(self) -> 'MagicTreeDictionary':
         """
         Utility method for creating a new MagicTreeDict object (to avoid having to import the class)
 
@@ -204,7 +202,7 @@ class MagicTreeDict(defaultdict):
 
     def _get_leaf_info(self, current=None, path=None):
         if current is None:
-            self._leaf_info = MagicTreeDict()
+            self._leaf_info = MagicTreeDictionary()
             current = self
         if path is None:
             path = []
@@ -245,7 +243,7 @@ class MagicTreeDict(defaultdict):
         Checks if the input is a Hashable or an Iterable of Hashables (aka a tree path)
         """
         if isinstance(key, Hashable):
-            super(MagicTreeDict, self).__setitem__(key, value)
+            super(MagicTreeDictionary, self).__setitem__(key, value)
         elif isinstance(key, Iterable):
             key = list(key)
             if not all(isinstance(k, Hashable) for k in key):
@@ -264,7 +262,7 @@ class MagicTreeDict(defaultdict):
 
         """
         if isinstance(keys, str) or isinstance(keys, int):
-            return super(MagicTreeDict, self).__getitem__(keys)
+            return super(MagicTreeDictionary, self).__getitem__(keys)
         elif isinstance(keys, collections.abc.Iterable):
             current_data = self
             for key in keys:

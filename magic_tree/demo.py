@@ -1,12 +1,11 @@
-import os
 from pathlib import Path
 from pprint import pprint
 
-from magic_tree.magic_tree_dict import MagicTreeDict
+from magic_tree.magic_tree_dictionary import MagicTreeDictionary
 
 
 def create_sample_magic_tree():
-    magic_tree = MagicTreeDict()
+    magic_tree = MagicTreeDictionary()
     magic_tree['a']['b']['c']['woo'] = [1, 2, 13]
     magic_tree['a']['b']['c']['woo2'] = '✨'
     # magic_tree['a']['b']['c']['woo2']['woo3'] = '??' ??? doesn't work - should add new node, i think?
@@ -48,7 +47,7 @@ def magic_tree_demo():
 
     directory = Path(__file__).parent.parent
     print(f"Print a file structure from: {directory}")
-    tree = MagicTreeDict.from_directory(directory=directory)
+    tree = MagicTreeDictionary.from_directory(directory=directory)
     print(tree)
 
 
