@@ -1,6 +1,8 @@
 import collections
+import json
 import sys
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Callable, Hashable, Iterable, Literal
 from typing import List, Union
 
@@ -284,8 +286,15 @@ class MagicTreeDict(defaultdict):
 
     def to_dict(self):
         return self.__dict__()
+
     def as_dict(self):
         return self.__dict__()
 
     def dict(self):
         return self.__dict__()
+
+    def to_json(self, indent=4, **kwargs):
+        return json.dumps(self, indent=indent, **kwargs)
+
+
+

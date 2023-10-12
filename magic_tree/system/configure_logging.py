@@ -5,7 +5,7 @@ from enum import Enum
 from logging.config import dictConfig
 from pathlib import Path
 
-logger = logging.getLogger(__name__)
+
 
 class LogLevel(Enum):
     TRACE = 5
@@ -215,9 +215,8 @@ def log_test_messages(logger):
 
 
 if __name__ == "__main__":
-    from jonbot.system.setup_logging.get_logger import get_jonbot_logger
+    logger = logging.getLogger(__name__)
 
-    logger = get_jonbot_logger()
     configure_logging(LogLevel.TRACE)  # Setting the root logger level to TRACE
     log_test_messages(logger)
     logger.success(
