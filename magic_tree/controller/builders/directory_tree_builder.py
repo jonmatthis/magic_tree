@@ -85,7 +85,7 @@ class DirectoryTreeBuilder(BaseModel):
             return "<content could not be loaded>"
 
     def _convert_to_tree_path(self, path: Union[str, Path]) -> Iterable[Hashable]:
-        tree_path = [f"{Path(self.root_path).stem}/"]
+        tree_path = []
         path = Path(path)
         if path == self.root_path:
             return tree_path
