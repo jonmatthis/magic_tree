@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Union
 
 from dotenv import load_dotenv
-
 from magic_tree.controller.builders.directory_tree_builder import DirectoryTreeBuilder
 from magic_tree.examples.tree_eaters.helpers.code_llm_chains import create_code_review_chain
 from magic_tree.models.configuration.directory_tree_builder_configuration import DirectoryTreeConfig
@@ -67,5 +66,6 @@ async def code_tree_eater(root_path: Union[Path, str]):
 
 
 if __name__ == "__main__":
-    code_root_path_in = Path(__file__).parent.parent
+    # code_root_path_in = Path(__file__).parent.parent # eat self
+    code_root_path_in = Path(__file__).parent.parent.parent.parent / "magic_tree"
     asyncio.run(code_tree_eater(root_path=code_root_path_in))
